@@ -104,13 +104,44 @@ class TodoList {
   }
 
   filter(callback) {
-    let filtered = [];
+    let filtered = new TodoList(this.title);
     this.forEach((todo) => {
       if (callback(todo)) {
-        filtered.push(todo)
+        filtered.add(todo)
       }
     })
     return filtered;
+  }
+
+  findByTitle(title) {
+    return this.filter((todo) => todo.getTitle() === title).first();
+  }
+
+  allDone() {
+    return this.filter((todo) => todo.isDone())
+  }
+
+  allNotDone() {
+    return this.filter((todo) => !todo.isDone())
+  }
+
+  markDone(title) {
+    let todo = this.findByTitle(title);
+    if (todo !== undefined) {
+      todo.markDone();
+    }
+  }
+
+  markAllDone() {
+    this.forEach((todo) => todo.markDone());
+  }
+
+  markAllUndone() {
+    this.forEach((todo) => todo.markUndone());
+  }
+
+  toArray() {
+    return this.todos.slice();
   }
 }
 
@@ -133,6 +164,5 @@ list.add(todo6);
 todo1.markDone();
 todo5.markDone();
 
-let doneTodos = list.filter(todo => todo.isDone());
-console.log(doneTodos);
+console.log(list.findByTitle('Clean room'));
 
